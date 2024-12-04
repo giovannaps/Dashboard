@@ -1,84 +1,80 @@
 const _elements = {
-    loading: document.querySelector(".loading"),
-    switch: document.querySelector(".switch__track"),
-    stateSelectToggle: document.querySelector(".state-select-toggle"),
+    body: document.querySelector("body"),
+    search: document.querySelector("#search"),
+    switch: document.querySelector(".switch"),
     selectOptions: document.querySelectorAll(".state-select-list__item"),
-    selectList: document.querySelector(".state-select-list"),
-    selectToggleIcon: document.querySelector(".state-select-toggle__icon"),
-    selectSearchBox: document.querySelector(".state-select-list__search"),
-    selectStateSelected: document.querySelector(".state-select-toggle__label"),
-    confirmed: document.querySelector(".info__total--confirmed"),
-    deaths: document.querySelector(".info__total--deaths"),
-    deathsDescription: document.querySelector(".data-box__description"),
-    vaccinated1: document.querySelector(".info__total--vaccinated-1"),
-    vaccinated2: document.querySelector(".info__total--vaccinated-2"),
-}
+    stateCard: document.querySelectorAll(".state-card"),
+    cardValue: document.querySelectorAll(".state-card__value"),
+    cardTitle: document.querySelectorAll(".state-card__title"),
+    chartDonut: document.querySelector("#chart-donut"),
+    chartStacked: document.querySelector("#chart-stacked")
+};
 
-const _data = {
-    id: "brasil=true",
-    vaccinatedInfo: undefined,
-    vaccinated: undefined,
-    confirmed: undefined,
-    deaths: undefined,
-}
+// TEMA - MODO ESCURO
+const switchTrack = document.querySelector('.switch_track');
+const body = document.body;
 
-const _charts = {};
-
-_elements.switch.addEventListener("click", () => {
-
+// Adiciona um evento de clique no switch
+switchTrack.addEventListener('click', () => {
+    // Obtém o tema atual
+    const currentTheme = body.getAttribute('data-theme');
+    
+    // Alterna o tema entre claro e escuro
+    if (currentTheme === 'light') {
+        body.setAttribute('data-theme', 'dark');
+    } else {
+        body.setAttribute('data-theme', 'light');
+    }
 });
 
-_elements.stateSelectToggle.addEventListener("click", () => {
-
+// BUSCA - FILTRAR UFS
+_elements.search.addEventListener("keyup", (e) => {
+    const search = e.target.value.toLowerCase();
+    for(const item of _elements.selectOptions) {
+        const state = item.innerText.toLowerCase();
+        if(state.includes(search)) {
+            item.classList.remove("state-select-list__item--hide");
+        } else {
+            item.classList.add("state-select-list__item--hide");
+        }
+    }
 });
 
-_elements.selectOptions.forEach(item => {
-
-});
-
-_elements.selectSearchBox.addEventListener("keyup", (e) => {
-
-});
-
-const request = (api, id) => {
-
+// ATUALIZAR CARDS
+function updateCards(ufs) {
+    _elements.cardValue.forEach((card, i) => {
+        card.innerText = ufs[i].cases.new;
+    });
+    _elements.cardTitle.forEach((card, i) => {
+        card.innerText = ufs[i].state;
+    });
 }
 
-const loadData = (id) => {
-
+// REQUEST - OBTER DADOS DA API
+async function request(url) {
+    const data = await fetch(url);
+    const json = await data.json();
+    return json;
 }
 
-const createBasicChart = (element, config) => {
-
+// GRAFICO - DOENÇA
+function createDonutChart(data) {
+    // Lógica para criar gráfico de rosca (Donut)
+    console.log("Criando gráfico de rosca...");
 }
 
-const createDonutChart = (element) => {
-
+// GRAFICO - DOENÇA
+function createStackedColumnsChart(data) {
+    // Lógica para criar gráfico de colunas empilhadas
+    console.log("Criando gráfico de colunas empilhadas...");
 }
 
-const createStackedColumnsChart = (element) => {
-
+// INICIALIZAÇÃO
+async function init() {
+    const ufs = await request("https://api.exemplo.com/ufs");
+    updateCards(ufs);
+    createDonutChart(ufs);
+    createStackedColumnsChart(ufs);
 }
 
-const createCharts = () => {
-
-}
-
-const updateCards = () => {
-
-}
-
-const updateCharts = () => {
-
-}
-
-const getChartOptions = (series, labels, colors) => {
-
-}
-
-const getDonutChartOptions = (value, name, colors) => {
-
-}
-
-loadData(_data.id);
-createCharts();
+init();
