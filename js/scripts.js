@@ -1,3 +1,8 @@
+const apiUrl = 'https://parseapi.back4app.com/classes/YourClass'; // Substitua 'YourClass' pelo nome da sua classe no back4app
+const headers = { 'Content-Type': 'application/json', 'X-Parse-Application-Id': 'HRhl71kGVyIMAN2nMHAaXlTD3WBtpizITlbP5Qxn', 'X-Parse-REST-API-Key': 
+    'e7LnHDF8sRFdNGVGijHevQ5XmrfCMd4O4xUfELE6'};
+    
+
 const _elements = {
     body: document.querySelector("body"),
     search: document.querySelector("#search"),
@@ -9,6 +14,80 @@ const _elements = {
     chartDonut: document.querySelector("#chart-donut"),
     chartStacked: document.querySelector("#chart-stacked")
 };
+//função ler dados
+async function createData() {
+    const date = document.getElementById('date').value;
+    const cases = document.getElementById('cases').value;
+    const deaths = document.getElementById('deaths').value;
+    const recovered = document.getElementById('recovered').value;
+
+    const data = { date, confirmedCases: cases, deaths, recovered };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        console.log(result);
+        readData(); 
+    } catch (error) {
+        console.error('Erro ao criar dados:', error);
+    }
+}
+//final da função
+
+//função leitura
+async function readData() {
+    try {
+        const response = await fetch(apiUrl, { headers });
+        const data = await response.json();
+        console.log(data);
+        updateCards(data.results);
+        createDonutChart(data.results);
+        createStackedColumnsChart(data.results);
+    } catch (error) {
+        console.error('Erro ao ler dados:', error);
+    }
+}
+//final da função
+
+//função update
+async function updateData(id, updatedData) {
+    try {
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(updatedData)
+        });
+        const result = await response.json();
+        console.log(result);
+        readData(); // Atualiza a lista de dados
+    } catch (error) {
+        console.error('Erro ao atualizar dados:', error);
+    }
+}
+//final função
+
+//delete dados
+async function deleteData(id) {
+    try {
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'DELETE',
+            headers
+        });
+        const result = await response.json();
+        console.log(result);
+        readData(); // Atualiza a lista de dados
+    } catch (error) {
+        console.error('Erro ao deletar dados:', error);
+    }
+}
+//final
+
+readData();
+
 
 // TEMA - MODO ESCURO
 const switchTrack = document.querySelector('.switch_track');
