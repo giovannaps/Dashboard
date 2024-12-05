@@ -1,19 +1,15 @@
 /* 0. Variáveis */
 [data-theme="light"] {
-<<<<<<< HEAD
 	--clr-background:#47663B;
 	--clr-font:#111111;
     --clr-card:#EED3B1;
     --clr-switch-track:#AABBCC;
     --clr-link:#3333FF;
-=======
     --clr-background: #F5F5F5;
     --clr-font: #111111;
     --clr-card: #FEE7E7;
     --clr-switch-track: #AABBCC;
     --clr-link: #3333FF;
->>>>>>> f8e3737 (.)
-
     --clr-confirmed: #D21212;
     --clr-deaths: #223344;
     --clr-vaccinated-1: #0000C7;
@@ -59,10 +55,7 @@ html {
 
 body {
     background-color: var(--clr-background);
-<<<<<<< HEAD
-=======
     color: var(--clr-font);
->>>>>>> f8e3737 (.)
     transition: var(--transition);
 }
 
@@ -103,10 +96,6 @@ a {
     align-items: center;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> f8e3737 (.)
 .logo {
 
     fill: var(--clr-font);
