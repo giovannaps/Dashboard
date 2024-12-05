@@ -1,3 +1,7 @@
+const apiUrl = 'https://parseapi.back4app.com/classes/Classedoback4app'; //Falta substituir a classe 
+const headers = {'Content-Type': 'application/json', 'X-Parse-Application-Id': 'HRhl71kGVyIMAN2nMHAaXlTD3WBtpizITlbP5Qxn', 'X-Parse-REST-API-Key':
+    'e7LnHDF8sRFdNGVGijHevQ5XmrfCMd4O4xUfELE6' };
+
 const _elements = {
     body: document.querySelector("body"),
     search: document.querySelector("#search"),
@@ -9,6 +13,91 @@ const _elements = {
     chartDonut: document.querySelector("#chart-donut"),
     chartStacked: document.querySelector("#chart-stacked")
 };
+// Função para criar dados
+async function createData() {
+    const date = document.getElementById('date').value;
+    const cases = document.getElementById('cases').value;
+    const deaths = document.getElementById('deaths').value;
+    const recovered = document.getElementById('recovered').value;
+
+  if (!validarDados(date, cases, deaths, recovered)) { return; 
+   } const data = { date, confirmedCases: cases, deaths, recovered }; 
+    try { const response = await fetch(apiUrl, { method: 'POST', headers, body: JSON.stringify(data) }); 
+         const result = await response.json();
+         exibirMensagem('Dados criados com sucesso!', 'sucesso'); 
+         console.log(result); readData(); } catch (error) { 
+        exibirMensagem('Erro ao criar dados!', 'erro'); 
+        console.error('Erro ao criar dados:', error);
+    }  
+}
+    const data = { date, confirmedCases: cases, deaths, recovered };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        exibirMensagem('Dados criados com sucesso!', 'sucesso');
+        console.log(result);
+        readData();
+    } catch (error) {
+        exibirMensagem('Erro ao criar dados!', 'erro');
+        console.error('Erro ao criar dados:', error);
+    }
+}
+
+// Função para ler dados
+async function readData() {
+    try {
+        const response = await fetch(apiUrl, { headers });
+        const data = await response.json();
+        console.log(data);
+        updateCards(data.results);
+        createDonutChart(data.results);
+        createStackedColumnsChart(data.results);
+    } catch (error) {
+        exibirMensagem('Erro ao ler dados!', 'erro');
+        console.error('Erro ao ler dados:', error);
+    }
+}
+
+// Função para atualizar dados
+async function updateData(id, updatedData) {
+    try {
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'PUT',
+            headers,
+            body: JSON.stringify(updatedData)
+        });
+        const result = await response.json();
+        exibirMensagem('Dados atualizados com sucesso!', 'sucesso');
+        console.log(result);
+        readData(); 
+    } catch (error) {
+        exibirMensagem('Erro ao atualizar dados!', 'erro');
+        console.error('Erro ao atualizar dados:', error);
+    }
+}
+
+// Função para deletar dados
+async function deleteData(id) {
+    try {
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'DELETE',
+            headers
+        });
+        const result = await response.json();
+        exibirMensagem('Dados deletados com sucesso!', 'sucesso');
+        console.log(result);
+        readData();
+    } catch (error) {
+        exibirMensagem('Erro ao deletar dados!', 'erro');
+        console.error('Erro ao deletar dados:', error);
+    }
+}
+
 
 // TEMA - MODO ESCURO
 const switchTrack = document.querySelector('.switch_track');
