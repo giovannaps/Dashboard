@@ -17,6 +17,14 @@
     <div class="loading">
         <!-- <i class="fas fa-spinner loading_spinner"></i> -->
     </div>
+	<form id="data-form">
+    <input type="date" id="date" name="date" required>
+    <input type="number" id="cases" name="cases" placeholder="Confirmed Cases" required>
+    <input type="number" id="deaths" name="deaths" placeholder="Deaths" required>
+    <input type="number" id="recovered" name="recovered" placeholder="Recovered" required>
+    <button type="button" onclick="createData()">Create</button>
+</form>
+
 
     <div class="navbar"> 
 <svg width="144" height="18" viewBox="0 0 144 18" fill="none" xmlns="http://www.w3.org/2000/svg">
